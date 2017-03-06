@@ -1,4 +1,4 @@
-package br.com.caelum.leilao.teste;
+package br.com.caelum.leilao.servico;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,7 +8,7 @@ import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.dominio.Usuario;
 import br.com.caelum.leilao.servico.Avaliador;
 
-public class TesteDoAvaliador {
+public class AvaliadorTest {
 
 	@Test
     public void deveEntenderLancesEmOrdemCrescente() {
@@ -19,7 +19,7 @@ public class TesteDoAvaliador {
 
         Leilao leilao = new Leilao("Playstation 3 Novo");
 
-        leilao.propoe(new Lance(maria,250.0));
+        leilao.propoe(new Lance(maria,500.0));
         leilao.propoe(new Lance(joao,300.0));
         leilao.propoe(new Lance(jose,400.0));
 
@@ -28,11 +28,12 @@ public class TesteDoAvaliador {
         leiloeiro.avalia(leilao);
 
         // comparando a saida com o esperado
-        double maiorEsperado = 400;
-        double menorEsperado = 250;
+        double maiorEsperado = 500;
+        double menorEsperado = 300;
 
         Assert.assertEquals(maiorEsperado, leiloeiro.getMaiorLance(), 0.0001);
         Assert.assertEquals(menorEsperado, leiloeiro.getMenorLance(), 0.0001);
+        Assert.assertEquals(400, leiloeiro.getValorMedio(), 0.00001);
     }
 
 }
