@@ -2,7 +2,12 @@ package br.com.caelum.leilao.dominio;
 
 import static org.junit.Assert.assertEquals;
 
+import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
+
+import br.com.caelum.leilao.matcher.TemUmLanceMatcher;
 
 public class LeilaoTest {
 	
@@ -98,6 +103,11 @@ public class LeilaoTest {
 		
 		leilao.dobraLance(steve);
 		
-		assertEquals(1, leilao.getLances().size());
+		MatcherAssert.assertThat(leilao, temUmLance(leilao));
+	}
+	
+	@Factory
+	public static Matcher<Leilao> temUmLance(Leilao leilao) {
+		return new TemUmLanceMatcher(leilao);
 	}
 }

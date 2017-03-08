@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +11,9 @@ import br.com.caelum.leilao.builder.CriadorDeLeilao;
 import br.com.caelum.leilao.dominio.Lance;
 import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.dominio.Usuario;
-import br.com.caelum.leilao.servico.Avaliador;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 
 public class AvaliadorTest {
 	
@@ -130,9 +131,11 @@ public class AvaliadorTest {
 		leiloeiro.avalia(leilao);
 
 		assertEquals(3, leiloeiro.getTresMaiores().size());
-		assertEquals(400, leiloeiro.getTresMaiores().get(0).getValor(), 0.00001);
-		assertEquals(300, leiloeiro.getTresMaiores().get(1).getValor(), 0.00001);
-		assertEquals(200, leiloeiro.getTresMaiores().get(2).getValor(), 0.00001);
+		MatcherAssert.assertThat(leiloeiro.getTresMaiores(), 
+				Matchers.hasItems(
+						new Lance(joao, 400), 
+						new Lance(maria, 300), 
+						new Lance(joao, 200)));
 	}
 	
 	@Test
@@ -145,17 +148,17 @@ public class AvaliadorTest {
 		
 		leiloeiro.avalia(leilao);
 
-		assertEquals(2, leiloeiro.getTresMaiores().size());
-		assertEquals(400, leiloeiro.getTresMaiores().get(0).getValor(), 0.00001);
-		assertEquals(300, leiloeiro.getTresMaiores().get(1).getValor(), 0.00001);
+		MatcherAssert.assertThat(2, Matchers.equalTo(leiloeiro.getTresMaiores().size()));
+		MatcherAssert.assertThat(400.0, Matchers.equalTo(leiloeiro.getTresMaiores().get(0).getValor()));
+		MatcherAssert.assertThat(300.0, Matchers.equalTo(leiloeiro.getTresMaiores().get(1).getValor()));
 	}
 	
-	@Test
-	public void verificaTresMaioresSemLances() {
-		Leilao leilao = new Leilao("playstation 3 novo");
+	@Test(expected = RuntimeException.class)
+	public void naoDeveAvaliarLeilaoSemNenhumLanceDado() {
+		Leilao leilao = new CriadorDeLeilao()
+				.para("playstation 3 novo")
+				.constroi();
 		
 		leiloeiro.avalia(leilao);
-
-		assertEquals(0, leiloeiro.getTresMaiores().size());
 	}
 }
