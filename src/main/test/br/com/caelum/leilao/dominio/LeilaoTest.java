@@ -99,15 +99,16 @@ public class LeilaoTest {
 		Usuario steve = new Usuario("Steve Jobs");
 		Usuario bill = new Usuario("Bill Gates");
 		
-		leilao.propoe(new Lance(bill, 3000));
+		Lance lance = new Lance(bill, 3000);
+		leilao.propoe(lance);
 		
 		leilao.dobraLance(steve);
 		
-		MatcherAssert.assertThat(leilao, temUmLance(leilao));
+		MatcherAssert.assertThat(leilao, temUmLance(lance));
 	}
 	
 	@Factory
-	public static Matcher<Leilao> temUmLance(Leilao leilao) {
-		return new TemUmLanceMatcher(leilao);
+	public static Matcher<Leilao> temUmLance(Lance lance) {
+		return new TemUmLanceMatcher(lance);
 	}
 }

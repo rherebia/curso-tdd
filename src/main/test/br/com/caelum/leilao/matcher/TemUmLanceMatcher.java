@@ -1,34 +1,27 @@
 package br.com.caelum.leilao.matcher;
 
-import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 
+import br.com.caelum.leilao.dominio.Lance;
 import br.com.caelum.leilao.dominio.Leilao;
 
-public class TemUmLanceMatcher extends BaseMatcher<Leilao> {
+public class TemUmLanceMatcher extends TypeSafeMatcher<Leilao> {
 	
-	private Leilao leilao;
+	private Lance lance;
 	
-	public TemUmLanceMatcher(Leilao leilao) {
-		this.leilao = leilao;
+	public TemUmLanceMatcher(Lance lance) {
+		this.lance = lance;
 	}
 
 	@Override
-	public boolean matches(Object obj) {
-		if (obj instanceof Leilao) {
-			if (leilao.equals(obj)) {
-				if (!leilao.getLances().isEmpty()) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
+	public boolean matchesSafely(Leilao leilao) {
+		return leilao.getLances().contains(lance);
 	}
 
 	@Override
 	public void describeTo(Description description) {
-		description.appendText("possui ao menos um lance");
+		description.appendText("leilao com lance " + lance.getValor());
 	}
 
 }
